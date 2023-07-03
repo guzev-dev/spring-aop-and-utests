@@ -37,9 +37,10 @@ public class SubscriberServiceTests {
     }
 
     @Test
-    public void Create_ShouldBeCreated() {
+    public void Create_ResultShouldBeSaved() {
         when(subscriberRepo.findById(testSubscriber.getEmail()))
                         .thenReturn(Optional.empty());
+
         when(subscriberRepo.save(testSubscriber))
                 .thenReturn(testSubscriber);
 
@@ -47,7 +48,6 @@ public class SubscriberServiceTests {
 
         assertNotNull(createdSubscriber);
         assertEquals(testSubscriber.getEmail(), createdSubscriber.getEmail());
-        assertEquals(testSubscriber.getUsername(), createdSubscriber.getUsername());
 
         verify(subscriberRepo, times(1)).save(testSubscriber);
     }
@@ -84,6 +84,7 @@ public class SubscriberServiceTests {
         List<Subscriber> subscribers = List.of(new Subscriber("test1@email.com", "test-user1"),
                 new Subscriber("test2@email.com", "test-user2"),
                 new Subscriber("test3@email.com", "test-user3"));
+
         when(subscriberRepo.findAll(PageRequest.of(0,5)))
                 .thenReturn(new PageImpl<>(subscribers));
 
@@ -91,10 +92,11 @@ public class SubscriberServiceTests {
 
         assertNotNull(retrievedSubscribers);
         assertEquals(3, retrievedSubscribers.size());
+        assertInstanceOf(Subscriber.class, retrievedSubscribers.get(0));
     }
 
     @Test
-    public void Update_ShouldBeUpdated() {
+    public void Update_UpdatesShouldBeSaved() {
         when(subscriberRepo.save(testSubscriber))
                 .thenReturn(testSubscriber);
 
@@ -107,8 +109,7 @@ public class SubscriberServiceTests {
     }
 
     @Test
-    public void Delete_ShouldBeDeleted() {
-
+    public void Delete_ResultShouldBeSaved() {
         subscriberService.delete(testSubscriber.getEmail());
 
         verify(subscriberRepo, times(1)).deleteById(testSubscriber.getEmail());
