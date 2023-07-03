@@ -29,11 +29,12 @@ public class MailingAspect {
 
         Integer result = (Integer)proceedingJoinPoint.proceed();
 
-        Optional<Publisher> publisherToUpdate = publisherRepo.findById(publisherName);
+        if (result > 0) {
+            Optional<Publisher> publisherToUpdate = publisherRepo.findById(publisherName);
 
-        if (publisherToUpdate.isPresent() && result > 0) {
             PublisherStatsChanger updatedPublisher = new PublisherStatsChanger(publisherToUpdate.get());
             updatedPublisher.increaseMailsSent(result);
+
             publisherRepo.save(updatedPublisher);
         }
 

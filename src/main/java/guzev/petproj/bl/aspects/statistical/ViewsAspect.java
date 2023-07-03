@@ -42,7 +42,7 @@ public class ViewsAspect {
 
     @AfterReturning(value = "readByPointcut() && returnPublisherResponseEntity()",
             returning = "publisher")
-    public void beforePublisherReadBy(ResponseEntity<Publisher> publisher) {
+    public void afterPublisherReadBy(ResponseEntity<Publisher> publisher) {
 
         if (increaseViews(publisher.getBody(), publishersMap)) {
             PublisherStatsChanger updatedPublisher = new PublisherStatsChanger(publisher.getBody());
@@ -59,7 +59,7 @@ public class ViewsAspect {
 
     @AfterReturning(value = "readByPointcut() && returnArticleResponseEntity()",
             returning = "article")
-    public void beforeArticleReadBy(ResponseEntity<Article> article) {
+    public void afterArticleReadBy(ResponseEntity<Article> article) {
 
         if (increaseViews(article.getBody(), articlesMap)) {
 
