@@ -43,11 +43,11 @@ public class Publisher {
     private Long mailsSent = 0L;
 
     @JsonCreator
-    public Publisher(@JsonProperty(required = true) @NonNull String name,
-                     @JsonProperty(required = true) @NonNull String link,
-                     @JsonProperty(required = true) @NonNull String redactor,
-                     @JsonProperty(required = true) @NonNull String contactNumber,
-                     @JsonProperty(required = true) @NonNull String address) {
+    public Publisher(@JsonProperty(required = true, value = "name") @NonNull String name,
+                     @JsonProperty(required = true, value = "link") @NonNull String link,
+                     @JsonProperty(required = true, value = "redactor") @NonNull String redactor,
+                     @JsonProperty(required = true, value = "contactNumber") @NonNull String contactNumber,
+                     @JsonProperty(required = true, value = "address") @NonNull String address) {
         this.name = name;
         this.link = link;
         this.redactor = redactor;

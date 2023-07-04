@@ -25,7 +25,7 @@ public class Article {
     private String title;
 
     private String content;
-
+    
     @DBRef
     private Publisher publisher;
 
@@ -36,8 +36,8 @@ public class Article {
     private Long views = 0L;
 
     @JsonCreator
-    public Article(@JsonProperty(required = true) @NonNull String title,
-                   @JsonProperty(required = true) @NonNull String content) {
+    public Article(@JsonProperty(required = true, value = "title") @NonNull String title,
+                   @JsonProperty(required = true, value = "content") @NonNull String content) {
         this.title = title;
         this.content = content;
     }

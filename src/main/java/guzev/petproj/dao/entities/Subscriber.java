@@ -17,8 +17,8 @@ public class Subscriber {
     private String username;
 
     @JsonCreator
-    public Subscriber(@JsonProperty(required = true) @NonNull String email,
-                      @JsonProperty(required = true) @NonNull String username) {
+    public Subscriber(@JsonProperty(required = true, value = "email") @NonNull String email,
+                      @JsonProperty(required = true, value = "username") @NonNull String username) {
         this.email = email;
         this.username = username;
     }
