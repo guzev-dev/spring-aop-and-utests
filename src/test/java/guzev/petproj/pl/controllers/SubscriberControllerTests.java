@@ -109,15 +109,12 @@ public class SubscriberControllerTests {
         subscribers.add(new Subscriber("test1@email.com", "test-user1"));
         subscribers.add(new Subscriber("test2@email.com", "test-user2"));
         subscribers.add(new Subscriber("test3@email.com", "test-user3"));
-        final String json = objectMapper.writeValueAsString(subscribers);
 
         when(subscriberService.readAll(1, 3))
                 .thenReturn(subscribers);
 
         MvcResult requestResult = mockMvc.perform(get("/pet-proj/api/subscriber")
-                        .param("page", "1").param("size", "3")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .param("page", "1").param("size", "3"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -194,7 +191,7 @@ public class SubscriberControllerTests {
     }
 
     @Test
-    public void Delete_ResponseShouldBeTrue() throws Exception {
+    public void DeleteSubscriber_ResponseShouldBeTrue() throws Exception {
         MvcResult requestResult = mockMvc.perform(delete("/pet-proj/api/subscriber/{email}", testSubscriber.getEmail()))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -205,6 +202,18 @@ public class SubscriberControllerTests {
         assertTrue((Boolean) result.get("deleted"));
 
         verify(subscriberService, times(1)).delete(testSubscriber.getEmail());
+    }
+
+    @Test
+    public void DeleteSubscriber_ShouldThrowException_IfSubscriberNotExists() throws Exception {
+        doThrow(NoSuchElementException.class).when(subscriberService).delete(testSubscriber.getEmail());
+
+        try {
+            mockMvc.perform(delete("/pet-proj/api/subscriber/{email}", testSubscriber.getEmail()))
+                    .andExpect(status().isBadRequest());
+        } catch (ServletException e) {
+            assertEquals(NoSuchElementException.class, e.getRootCause().getClass());
+        }
     }
 
 }

@@ -89,7 +89,7 @@ public class ArticleServiceTests {
     }
 
     @Test
-    public void ReadById_ShouldThrowException_IfNotExists() {
+    public void ReadById_ShouldThrowException_IfArticleNotExists() {
         ReflectionTestUtils.setField(testArticle, "id", "test-article-id");
 
         when(articleRepo.findById(testArticle.getId()))
@@ -100,25 +100,25 @@ public class ArticleServiceTests {
 
     @Test
     public void ReadByTitleAndPublisherName_ShouldReturnArticle() {
-        final String pubsliher = "test-publisher";
+        final String publisher = "test-publisher";
 
-        when(articleRepo.readArticleByTitleAndPublisherName(testArticle.getTitle(), pubsliher))
+        when(articleRepo.readArticleByTitleAndPublisherName(testArticle.getTitle(), publisher))
                 .thenReturn(Optional.of(testArticle));
 
-        Article retrievedArticle = articleService.readByTitleAndPublisherName(testArticle.getTitle(), pubsliher);
+        Article retrievedArticle = articleService.readByTitleAndPublisherName(testArticle.getTitle(), publisher);
 
         assertNotNull(retrievedArticle);
         assertEquals(testArticle.getTitle(), retrievedArticle.getTitle());
     }
 
     @Test
-    public void ReadByTitleAndPublisherName_ShouldThrowException_IfNotExists() {
-        final String pubsliher = "test-publisher";
+    public void ReadByTitleAndPublisherName_ShouldThrowException_IfArticleNotExists() {
+        final String publisher = "test-publisher";
 
-        when(articleRepo.readArticleByTitleAndPublisherName(testArticle.getTitle(), pubsliher))
+        when(articleRepo.readArticleByTitleAndPublisherName(testArticle.getTitle(), publisher))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> articleService.readByTitleAndPublisherName(testArticle.getTitle(), pubsliher));
+        assertThrows(NoSuchElementException.class, () -> articleService.readByTitleAndPublisherName(testArticle.getTitle(), publisher));
     }
 
     @Test
@@ -171,9 +171,21 @@ public class ArticleServiceTests {
     public void Delete_ResultShouldBeSaved() {
         ReflectionTestUtils.setField(testArticle, "id", "test-article-id");
 
+        when(articleRepo.findById(testArticle.getId()))
+                .thenReturn(Optional.of(testArticle));
+
         articleService.delete(testArticle.getId());
 
         verify(articleRepo, times(1)).deleteById(testArticle.getId());
+    }
+
+    @Test
+    public void Delete_ShouldThrowException_IfArticleNotExists() {
+        when(articleRepo.findById(testArticle.getId()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> articleService.delete(testArticle.getId()));
+        verify(articleRepo, times(0)).deleteById(testArticle.getId());
     }
 
 

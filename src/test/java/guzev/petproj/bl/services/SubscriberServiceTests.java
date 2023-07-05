@@ -72,7 +72,7 @@ public class SubscriberServiceTests {
     }
 
     @Test
-    public void ReadByEmail_ShouldThrowException_IfNotExists() {
+    public void ReadByEmail_ShouldThrowException_IfSubscriberNotExists() {
         when(subscriberRepo.findById(testSubscriber.getEmail()))
                 .thenReturn(Optional.empty());
 
@@ -110,8 +110,20 @@ public class SubscriberServiceTests {
 
     @Test
     public void Delete_ResultShouldBeSaved() {
+        when(subscriberRepo.findById(testSubscriber.getEmail()))
+                .thenReturn(Optional.of(testSubscriber));
+
         subscriberService.delete(testSubscriber.getEmail());
 
         verify(subscriberRepo, times(1)).deleteById(testSubscriber.getEmail());
+    }
+
+    @Test
+    public void Delete_ShouldThrowException_IfSubscriberNotExists() {
+        when(subscriberRepo.findById(testSubscriber.getEmail()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> subscriberService.delete(testSubscriber.getEmail()));
+        verify(subscriberRepo, times(0)).deleteById(testSubscriber.getEmail());
     }
 }

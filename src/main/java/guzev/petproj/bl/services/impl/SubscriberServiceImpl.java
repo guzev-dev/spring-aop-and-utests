@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +46,9 @@ public class SubscriberServiceImpl implements SubscriberService {
 
     @Override
     public void delete(String email) {
-        subscriberRepo.deleteById(email);
+        if (subscriberRepo.findById(email).isPresent())
+            subscriberRepo.deleteById(email);
+        else
+            throw new NoSuchElementException();
     }
 }

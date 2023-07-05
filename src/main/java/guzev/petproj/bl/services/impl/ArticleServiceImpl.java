@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.BinaryOperator;
 
 @Service
@@ -69,7 +70,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void delete(String id) {
-        articleRepo.deleteById(id);
+        if (articleRepo.findById(id).isPresent())
+            articleRepo.deleteById(id);
+        else
+            throw new NoSuchElementException();
     }
 
     private final BinaryOperator<String> notificationMessage = (publisherName, articleTitle) ->

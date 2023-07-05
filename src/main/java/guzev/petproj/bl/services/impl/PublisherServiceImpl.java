@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -104,7 +105,10 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public void delete(String name) {
-        publisherRepo.deleteById(name);
+        if (publisherRepo.findById(name).isPresent())
+            publisherRepo.deleteById(name);
+        else
+            throw new NoSuchElementException();
     }
 
     private void sendMail(String[] emails, String messageText) {

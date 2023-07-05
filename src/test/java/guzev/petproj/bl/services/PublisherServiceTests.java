@@ -81,7 +81,7 @@ public class PublisherServiceTests {
     }
 
     @Test
-    public void ReadByName_ShouldThrowException_IfNotExists() {
+    public void ReadByName_ShouldThrowException_IfPublisherNotExists() {
         when(publisherRepo.findById(testPublisher.getName()))
                 .thenReturn(Optional.empty());
 
@@ -262,8 +262,20 @@ public class PublisherServiceTests {
 
     @Test
     public void Delete_ResultShouldBeSaved() {
+        when(publisherRepo.findById(testPublisher.getName()))
+                .thenReturn(Optional.of(testPublisher));
+
         publisherService.delete(testPublisher.getName());
 
         verify(publisherRepo, times(1)).deleteById(testPublisher.getName());
+    }
+
+    @Test
+    public void Delete_ShouldThrowException_IfPublisherNotExists() {
+        when(publisherRepo.findById(testPublisher.getName()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> publisherService.delete(testPublisher.getName()));
+        verify(publisherRepo, times(0)).deleteById(testPublisher.getName());
     }
 }
