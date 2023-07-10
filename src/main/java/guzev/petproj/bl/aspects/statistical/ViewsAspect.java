@@ -18,6 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * <h3>Aspect that response for updating statistical information about views of a specific resource.</h3>
+ * To optimize interaction with database aspect write changes to db only when difference in views
+ * reaches <b>{@code stats.views.step}</b> value <i>(from application.properties)</i>.*/
+
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -42,7 +47,7 @@ public class ViewsAspect {
 
     @AfterReturning(value = "readByPointcut() && returnPublisherResponseEntity()",
             returning = "publisher")
-    public void beforePublisherReadBy(ResponseEntity<Publisher> publisher) {
+    public void afterPublisherReadBy(ResponseEntity<Publisher> publisher) {
 
         if (increaseViews(publisher.getBody(), publishersMap)) {
             PublisherStatsChanger updatedPublisher = new PublisherStatsChanger(publisher.getBody());
@@ -59,7 +64,7 @@ public class ViewsAspect {
 
     @AfterReturning(value = "readByPointcut() && returnArticleResponseEntity()",
             returning = "article")
-    public void beforeArticleReadBy(ResponseEntity<Article> article) {
+    public void afterArticleReadBy(ResponseEntity<Article> article) {
 
         if (increaseViews(article.getBody(), articlesMap)) {
 
@@ -76,7 +81,7 @@ public class ViewsAspect {
     }
 
     /**
-     * @return <b>true</b> means that views difference between db stored and
+     * @return <b>true</b> means that views difference between database stored and
      * application data reached <b>{@code stats.views.step}</b> value <i>(from application.properties)</i>.
      */
     private <O> boolean increaseViews(O statsObject, Map<O, ViewsDifference> viewsDifferenceMap) {

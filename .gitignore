@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ### Logs ###
-.log
+*.log
+pet-proj-logs

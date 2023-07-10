@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * <h3>Aspect that response for updating statistical information about sent email letters.</h3>*/
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -29,11 +31,12 @@ public class MailingAspect {
 
         Integer result = (Integer)proceedingJoinPoint.proceed();
 
-        Optional<Publisher> publisherToUpdate = publisherRepo.findById(publisherName);
+        if (result > 0) {
+            Optional<Publisher> publisherToUpdate = publisherRepo.findById(publisherName);
 
-        if (publisherToUpdate.isPresent() && result > 0) {
             PublisherStatsChanger updatedPublisher = new PublisherStatsChanger(publisherToUpdate.get());
             updatedPublisher.increaseMailsSent(result);
+
             publisherRepo.save(updatedPublisher);
         }
 

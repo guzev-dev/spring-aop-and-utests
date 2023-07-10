@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * <h3>Class represents articles.</h3>*/
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "article")
@@ -25,7 +28,7 @@ public class Article {
     private String title;
 
     private String content;
-
+    
     @DBRef
     private Publisher publisher;
 
@@ -36,8 +39,8 @@ public class Article {
     private Long views = 0L;
 
     @JsonCreator
-    public Article(@JsonProperty(required = true) @NonNull String title,
-                   @JsonProperty(required = true) @NonNull String content) {
+    public Article(@JsonProperty(required = true, value = "title") @NonNull String title,
+                   @JsonProperty(required = true, value = "content") @NonNull String content) {
         this.title = title;
         this.content = content;
     }

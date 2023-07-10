@@ -10,11 +10,13 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -79,9 +81,8 @@ public class PublisherServiceImpl implements PublisherService {
                 .orElseThrow();
         final Subscriber subscriber = subscriberService.readByEmail(subscriberEmail);
 
-        publisher.getSubscribers().add(subscriber);
-
-        publisherRepo.save(publisher);
+        if (publisher.getSubscribers().add(subscriber))
+            publisherRepo.save(publisher);
 
         return true;
     }
@@ -100,12 +101,14 @@ public class PublisherServiceImpl implements PublisherService {
             return true;
         } else
             return false;
-
     }
 
     @Override
     public void delete(String name) {
-        publisherRepo.deleteById(name);
+        if (publisherRepo.findById(name).isPresent())
+            publisherRepo.deleteById(name);
+        else
+            throw new NoSuchElementException();
     }
 
     private void sendMail(String[] emails, String messageText) {
@@ -120,9 +123,8 @@ public class PublisherServiceImpl implements PublisherService {
             helper.setText(messageText, true);
 
             mailSender.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-            //todo: refactor
+        } catch (MessagingException | MailException e) {
+            throw new RuntimeException("Cannot send emails:" + e.getMessage());
         }
     }
 }
