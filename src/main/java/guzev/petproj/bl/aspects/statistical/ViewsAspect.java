@@ -18,6 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * <h3>Aspect that response for updating statistical information about views of a specific resource.</h3>
+ * To optimize interaction with database aspect write changes to db only when difference in views
+ * reaches <b>{@code stats.views.step}</b> value <i>(from application.properties)</i>.*/
+
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -76,7 +81,7 @@ public class ViewsAspect {
     }
 
     /**
-     * @return <b>true</b> means that views difference between db stored and
+     * @return <b>true</b> means that views difference between database stored and
      * application data reached <b>{@code stats.views.step}</b> value <i>(from application.properties)</i>.
      */
     private <O> boolean increaseViews(O statsObject, Map<O, ViewsDifference> viewsDifferenceMap) {

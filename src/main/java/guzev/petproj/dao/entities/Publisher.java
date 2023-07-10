@@ -10,6 +10,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * <h3>Class represents a publisher that posts {@link Article}.</h3>*/
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "publisher")

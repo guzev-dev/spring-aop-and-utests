@@ -1,5 +1,6 @@
 package guzev.petproj.bl.aspects;
 
+import guzev.petproj.dao.entities.Article;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,11 +15,16 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * <h3>Aspect that log exceptions occurred during runtime.</h3>
+ * */
 
 @Aspect
 @Component
 public class ExceptionLoggingAspect {
 
+    /**
+     * {@link Set} include exceptions that should not be logged.*/
     private final Set<Class<? extends Throwable>> excludedExceptions = Set.of(
             NoSuchElementException.class,
             DuplicateKeyException.class

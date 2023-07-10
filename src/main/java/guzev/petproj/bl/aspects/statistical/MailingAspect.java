@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * <h3>Aspect that response for updating statistical information about sent email letters.</h3>*/
 @Aspect
 @Component
 @RequiredArgsConstructor

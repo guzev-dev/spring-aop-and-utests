@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * <h3>Class represents articles.</h3>*/
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "article")

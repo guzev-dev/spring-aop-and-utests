@@ -6,6 +6,9 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * <h3>Class represents a user who   can be subscribed to a {@link Publisher} articles</h3>*/
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "subscriber")
