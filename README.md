@@ -1,6 +1,6 @@
 # About project:
 
-This is just a small project to practice aspect-oriented programming, unit testing and
+This is just a small publishing app project to practice aspect-oriented programming, unit testing and
 integration with MongoDB database.
 
 Tech stack:
