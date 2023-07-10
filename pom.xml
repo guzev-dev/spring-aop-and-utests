@@ -12,7 +12,7 @@
 
     <groupId>guzev</groupId>
     <artifactId>pet-proj</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>v1.0</version>
     <name>pet-proj</name>
     <description>Pet project.</description>
 
